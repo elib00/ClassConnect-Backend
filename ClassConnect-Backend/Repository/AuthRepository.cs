@@ -1,5 +1,6 @@
 ﻿using ClassConnect_Backend.Models;
 using ClassConnect_Backend.Repository.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace ClassConnect_Backend.Repository
 {
@@ -17,6 +18,15 @@ namespace ClassConnect_Backend.Repository
             await _dbContext.SaveChangesAsync();
         }
 
+        public async Task<bool> IsExistingEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return false;
+
+            return await _dbContext.Users
+                .AsNoTracking()
+                .AnyAsync(user => user.Email == email);
+        }
 
     }
 }
